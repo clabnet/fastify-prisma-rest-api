@@ -1,16 +1,16 @@
-import buildServer from "./server";
+import buildServer from './server'
 
-const server = buildServer();
+const server = buildServer()
 
 async function main() {
   try {
-    await server.listen(3000, "0.0.0.0");
+    await server.listen({ port: 5003 })
 
-    console.log(`Server ready at http://localhost:3000`);
+    console.log(`Server ready at http://localhost:5003`)
   } catch (e) {
-    console.error(e);
-    process.exit(1);
+    console.error(e)
+    process.exit(1)
   }
 }
 
-main();
+main()

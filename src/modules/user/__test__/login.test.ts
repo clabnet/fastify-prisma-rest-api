@@ -2,7 +2,7 @@ import faker from "@faker-js/faker";
 import prisma from "../../../utils/prisma";
 import { test } from "tap";
 import buildServer from "../../../server";
-import { UserType } from "fastify-jwt";
+import { UserType } from "@fastify/jwt";
 
 test("POST `/api/users/login`", async () => {
   test("given the email and password are correct", async (t) => {

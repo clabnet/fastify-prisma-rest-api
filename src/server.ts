@@ -1,6 +1,7 @@
 import Fastify, { FastifyRequest, FastifyReply } from "fastify";
-import fjwt, { JWT } from "fastify-jwt";
-import swagger from "fastify-swagger";
+import fjwt, { JWT } from "@fastify/jwt";
+import { fastifySwagger } from '@fastify/swagger'
+import fastifySwaggerUI from '@fastify/swagger-ui'
 import { withRefResolver } from "fastify-zod";
 import userRoutes from "./modules/user/user.route";
 import productRoutes from "./modules/product/product.route";
@@ -17,7 +18,7 @@ declare module "fastify" {
   }
 }
 
-declare module "fastify-jwt" {
+declare module "@fastify/jwt" {
   interface FastifyJWT {
     user: {
       id: number;
@@ -59,20 +60,52 @@ function buildServer() {
   }
 
   server.register(
-    swagger,
+    fastifySwagger,
     withRefResolver({
-      routePrefix: "/docs",
-      exposeRoute: true,
-      staticCSP: true,
       openapi: {
         info: {
-          title: "Fastify API",
-          description: "API for some products",
-          version,
+          title: 'Fastify API',
+          description: 'PostgreSQL, Prisma, Fastify and Swagger REST APIs',
+          version: version,
         },
+        externalDocs: {
+          url: 'https://swagger.io',
+          description: 'Find more info here',
+        },
+        servers: [{ url: 'http://localhost:5003' }],
+        components: {
+          securitySchemes: {
+            // apiKey: {
+            //   type: 'apiKey',
+            //   name: 'apiKey',
+            //   in: 'header',
+            // },
+            bearerAuth: {
+              type: 'apiKey',
+              name: 'Authorization',
+              in: 'header',
+            },
+          },
+        },
+        // security: [{ apiKey: [] }],
+        security: [{ bearerAuth: [] }],
       },
     })
-  );
+  )
+
+  /**
+   * Definition API to address the swagger start page
+   */
+  const pathPrefix = `/swagger`
+
+  void server.register(fastifySwaggerUI, {
+    routePrefix: pathPrefix,
+    staticCSP: false,
+    uiConfig: {
+      docExpansion: 'none',
+      deepLinking: false,
+    },
+  })
 
   server.register(userRoutes, { prefix: "api/users" });
   server.register(productRoutes, { prefix: "api/products" });
