@@ -10,7 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id Int @id @default(autoincrement())
   email String @unique
@@ -29,4 +28,22 @@ model Product {
   price Float
   owner User @relation(fields: [ownerId], references: [id])
   ownerId Int
+}
+
+model Bom {
+  id              Int      @id @default(autoincrement())
+  selection       String?
+  type            String?
+  level           Int?
+  t_n             Int?
+  quantity        Int?
+	name            String?
+	revision        String?
+	parent          String?
+	description     String?
+	description_en  String?
+	spare_index     String?
+	wbe             String?
+	description_wbe String?
+	plantid         String?
 }

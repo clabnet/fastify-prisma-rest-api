@@ -1,23 +1,27 @@
 {
-  "name": "fastify-prisma",
+  "name": "fastify-prisma-rest-api",
   "version": "1.0.0",
-  "main": "index.js",
-  "author": "Tom Nagle",
   "license": "MIT",
+  "author": "",
+  "main": "index.js",
   "scripts": {
+    "build": "tsup",
+    "clean": "rimraf dist",
+    "debug": "pnpm dev --inspect",
     "dev": "tsnd --respawn --transpile-only --exit-child src/app.ts",
+    "______dev": "tsx watch ./src/app.ts",
+    "format": "prettier --config .prettierrc \"src/**/*.{js,json,ts,css,scss,vue,html,md}\" --write",
     "test": "tap --node-arg=--require=ts-node/register"
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
     "@fastify/jwt": "^7.2.0",
-    "@prisma/client": "^5.1.1",
-    "fastify": "^4.21.0",
     "@fastify/swagger": "^8.8.0",
     "@fastify/swagger-ui": "^1.9.3",
+    "@prisma/client": "^5.1.1",
+    "fastify": "^4.21.0",
     "fastify-zod": "^1.3.2",
-    "tap": "^16.3.8",
-    "ts-mock-imports": "^1.3.8",
+    "pino-pretty": "^10.2.0",
     "zod": "^3.21.4",
     "zod-to-json-schema": "^3.21.4"
   },
@@ -25,8 +29,15 @@
     "@types/node": "^20.4.8",
     "@types/tap": "^15.0.8",
     "sinon": "^15.2.0",
+    "tap": "^16.3.8",
+    "ts-mock-imports": "^1.3.8",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
+    "tsup": "^7.2.0",
+    "tsx": "^3.12.7",
     "typescript": "^5.1.6"
+  },
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
   }
 }

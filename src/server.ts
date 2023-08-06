@@ -1,62 +1,66 @@
-import Fastify, { FastifyRequest, FastifyReply } from "fastify";
-import fjwt, { JWT } from "@fastify/jwt";
+import Fastify, { FastifyRequest, FastifyReply } from 'fastify'
+import fjwt, { JWT } from '@fastify/jwt'
 import { fastifySwagger } from '@fastify/swagger'
 import fastifySwaggerUI from '@fastify/swagger-ui'
-import { withRefResolver } from "fastify-zod";
-import userRoutes from "./modules/user/user.route";
-import productRoutes from "./modules/product/product.route";
-import { userSchemas } from "./modules/user/user.schema";
-import { productSchemas } from "./modules/product/product.schema";
-import { version } from "../package.json";
+import { withRefResolver } from 'fastify-zod'
+import userRoutes from './modules/user/user.route'
+import productRoutes from './modules/product/product.route'
+import { userSchemas } from './modules/user/user.schema'
+import { productSchemas } from './modules/product/product.schema'
+import { version } from '../package.json'
 
-declare module "fastify" {
+declare module 'fastify' {
   interface FastifyRequest {
-    jwt: JWT;
+    jwt: JWT
   }
   export interface FastifyInstance {
-    authenticate: any;
+    authenticate: any
   }
 }
 
-declare module "@fastify/jwt" {
+declare module '@fastify/jwt' {
   interface FastifyJWT {
     user: {
-      id: number;
-      email: string;
-      name: string;
-    };
+      id: number
+      email: string
+      name: string
+    }
   }
 }
 
 function buildServer() {
-  const server = Fastify();
+  const server = Fastify({
+    disableRequestLogging: false,
+    logger: {
+      transport: {
+        target: 'pino-pretty',
+      },
+    },
+  })
 
   server.register(fjwt, {
-    secret: "ndkandnan78duy9sau87dbndsa89u7dsy789adb",
-  });
+    secret: 'ndkandnan78duy9sau87dbndsa89u7dsy789adb',
+  })
 
-  server.decorate(
-    "authenticate",
-    async (request: FastifyRequest, reply: FastifyReply) => {
-      try {
-        await request.jwtVerify();
-      } catch (e) {
-        return reply.send(e);
-      }
+  server.decorate('authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      await request.jwtVerify()
+    } catch (e) {
+      return reply.send(e)
     }
-  );
+  })
 
-  server.get("/healthcheck", async function () {
-    return { status: "OK" };
-  });
+  server.get('/healthcheck', async function () {
+    return { status: 'OK' }
+  })
 
-  server.addHook("preHandler", (req, reply, next) => {
-    req.jwt = server.jwt;
-    return next();
-  });
+  server.addHook('preHandler', (req, reply, next) => {
+    req.jwt = server.jwt
+    return next()
+  })
 
   for (const schema of [...userSchemas, ...productSchemas]) {
-    server.addSchema(schema);
+    server.addSchema(schema)
   }
 
   server.register(
@@ -73,22 +77,22 @@ function buildServer() {
           description: 'Find more info here',
         },
         servers: [{ url: 'http://localhost:5003' }],
-        components: {
-          securitySchemes: {
-            // apiKey: {
-            //   type: 'apiKey',
-            //   name: 'apiKey',
-            //   in: 'header',
-            // },
-            bearerAuth: {
-              type: 'apiKey',
-              name: 'Authorization',
-              in: 'header',
-            },
-          },
-        },
-        // security: [{ apiKey: [] }],
-        security: [{ bearerAuth: [] }],
+        // components: {
+        //   securitySchemes: {
+        //     // apiKey: {
+        //     //   type: 'apiKey',
+        //     //   name: 'apiKey',
+        //     //   in: 'header',
+        //     // },
+        //     bearerAuth: {
+        //       type: 'apiKey',
+        //       name: 'Authorization',
+        //       in: 'header',
+        //     },
+        //   },
+        // },
+        // // security: [{ apiKey: [] }],
+        // security: [{ bearerAuth: [] }],
       },
     })
   )
@@ -107,10 +111,10 @@ function buildServer() {
     },
   })
 
-  server.register(userRoutes, { prefix: "api/users" });
-  server.register(productRoutes, { prefix: "api/products" });
+  server.register(userRoutes, { prefix: 'api/users' })
+  server.register(productRoutes, { prefix: 'api/products' })
 
-  return server;
+  return server
 }
 
-export default buildServer;
+export default buildServer
