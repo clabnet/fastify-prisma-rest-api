@@ -77,22 +77,22 @@ function buildServer() {
           description: 'Find more info here',
         },
         servers: [{ url: 'http://localhost:5003' }],
-        // components: {
-        //   securitySchemes: {
-        //     // apiKey: {
-        //     //   type: 'apiKey',
-        //     //   name: 'apiKey',
-        //     //   in: 'header',
-        //     // },
-        //     bearerAuth: {
-        //       type: 'apiKey',
-        //       name: 'Authorization',
-        //       in: 'header',
-        //     },
-        //   },
-        // },
-        // // security: [{ apiKey: [] }],
-        // security: [{ bearerAuth: [] }],
+        components: {
+          securitySchemes: {
+            // apiKey: {
+            //   type: 'apiKey',
+            //   name: 'apiKey',
+            //   in: 'header',
+            // },
+            bearerAuth: {
+              type: 'apiKey',
+              name: 'Authorization',
+              in: 'header',
+            },
+          },
+        },
+        // security: [{ apiKey: [] }],
+        security: [{ bearerAuth: [] }],
       },
     })
   )

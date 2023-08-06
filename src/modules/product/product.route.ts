@@ -6,7 +6,7 @@ async function productRoutes(server: FastifyInstance) {
   server.post(
     '/',
     {
-      // preHandler: [server.authenticate],
+      preHandler: [server.authenticate],
       schema: {
         body: $ref('createProductSchema'),
         response: {

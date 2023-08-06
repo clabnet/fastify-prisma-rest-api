@@ -32,7 +32,7 @@ async function userRoutes(server: FastifyInstance) {
   server.get(
     '/',
     {
-      // preHandler: [server.authenticate],
+      preHandler: [server.authenticate],
     },
     getUsersHandler
   )
