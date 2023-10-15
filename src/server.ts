@@ -76,7 +76,7 @@ function buildServer() {
           url: 'https://swagger.io',
           description: 'Find more info here',
         },
-        servers: [{ url: 'http://localhost:5003' }],
+        servers: [{ url: 'http://localhost:5050' }],
         components: {
           securitySchemes: {
             // apiKey: {
