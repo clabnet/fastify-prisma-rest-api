@@ -5,5 +5,5 @@
 
 */
 -- AlterTable
-ALTER TABLE "Product" DROP COLUMN "createAt",
+ALTER TABLE "product" DROP COLUMN "createAt",
 ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
